@@ -1,4 +1,4 @@
-// Main SCSS file - imports all partials
-@import 'partials/variables';
-@import 'partials/mixins';
-@import 'partials/globals';
+// Main SCSS file - uses all partials
+@use 'partials/variables' as *;
+@use 'partials/mixins' as *;
+@use 'partials/globals' as *;
