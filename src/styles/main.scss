@@ -2,3 +2,10 @@
 @use 'partials/variables' as *;
 @use 'partials/mixins' as *;
 @use 'partials/globals' as *;
+
+.app{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
