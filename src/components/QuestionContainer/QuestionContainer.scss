@@ -1,0 +1,29 @@
+@use "../../styles/partials/variables" as *; 
+
+.question{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid grey;
+    padding: 1.6rem 1.6rem 2rem 1.6rem;
+
+    &__title{
+        font-size: 1.6rem;
+        color: $text;
+    }
+
+    &__container{
+        display: flex;
+        gap: 1rem;
+    }
+
+    &__incorrectAnswer, &__correctAnswer{
+        border: 1px solid $btnBorder;
+        padding: .5rem;
+        border-radius: 8px;
+        color: $text;
+        font-weight: 800;
+        cursor: pointer;
+    }
+}
