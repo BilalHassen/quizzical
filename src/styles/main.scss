@@ -2,3 +2,12 @@
 @use 'partials/variables' as *;
 @use 'partials/mixins' as *;
 @use 'partials/globals' as *;
+
+.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    gap: 4rem
+}
