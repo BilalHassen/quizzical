@@ -9,7 +9,7 @@
     padding: 1.6rem 1.6rem 2rem 1.6rem;
 
     &__title{
-        font-size: 1.6rem;
+        font-size: 2rem;
         color: $text;
     }
 
@@ -18,12 +18,21 @@
         gap: 1rem;
     }
 
-    &__incorrectAnswer, &__correctAnswer{
+    &__answer{
+        font-size: 1.3rem;
         border: 1px solid $btnBorder;
         padding: .5rem;
         border-radius: 8px;
         color: $text;
         font-weight: 800;
         cursor: pointer;
+    }
+
+    &__selected{
+        background-color: $selected;
+    }
+
+    &__disabled{
+        background-color: $selected;
     }
 }

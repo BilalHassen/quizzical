@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import "./Home.scss";
 import HomeHeader from '../../components/HomeHeader/HomeHeader';
-
+import getQuizdata from '../../hooks/getQuizData';
 import QuestionContainer from '../../components/QuestionContainer/QuestionContainer';
 import {he} from "he"
 
@@ -10,16 +10,21 @@ function Home() {
   const [error,setError] = useState(null)
   const [quizData,setQuizData] = useState(null)
   const [isGameStarted, setGameStarted] = useState(false)
+  // track the user guesses for correct or incorrect guesses
   const [userGuesses, setUserGuesses] = useState([])
   const [isGameDone, setIsGameDone] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
+
+  // start the game 
   const handleGameStart = ()=>{
     console.log("clicked")
     setGameStarted(!isGameStarted)
   }
 
+  // get the quiz data
 useEffect(()=>{
+  
   const handleQuizData = async()=>{
 
     setIsLoading(true)
@@ -27,7 +32,6 @@ useEffect(()=>{
     try{
       const quizData = await getQuizdata()
       setQuizData(quizData)
-      console.log(quizData)
     }catch(error){
       console.log(error)
       setError(error)
@@ -52,10 +56,9 @@ const score = `${correctGuesses.length}/${userGuesses.length}`
 const scorePercentage = `${correctGuesses.length / userGuesses.length * 100}`
 
 useEffect(()=>{
+  
   console.log(userGuesses)
-  console.log(correctGuesses)
-  console.log(incorrectGuesses)
-  console.log(scorePercentage)
+  
 },[userGuesses])
 
 
@@ -78,14 +81,14 @@ const checkScore = ()=>{
     {isLoading &&<h3 className='questions__loading'>Loading...</h3>}
 
    {quizData && isGameStarted ? quizData.map((data,index)=>{
-    console.log(data)
+
+
+
     return(
     <QuestionContainer 
-    key={index}
     setUserGuesses={setUserGuesses}
-    question={data.question}
-    incorrectAnswers={data.incorrect_answers}
-    correctAnswer={data.correct_answer}
+      question={data.question}
+      answers={data.answers}
     />
     )
 }) : null}
