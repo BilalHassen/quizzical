@@ -35,4 +35,15 @@
     &__disabled{
         background-color: $selected;
     }
+
+   
 }
+
+.correct{
+    background-color: green;
+}
+
+.incorrect{
+    background-color: red;
+}
+
