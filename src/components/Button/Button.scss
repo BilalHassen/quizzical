@@ -1,0 +1,39 @@
+@use "../../styles/partials/variables" as *;
+
+.answer-button {
+  font-size: 1.3rem;
+  border: 1px solid $btnBorder;
+  padding: 0.5rem;
+  border-radius: 8px;
+  color: $text;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover:not(:disabled) {
+    opacity: 0.8;
+  }
+
+  &--selected {
+    background-color: $selected;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+.correct{
+  background-color: rgb(15, 198, 15);
+  
+}
+
+.incorrect{background-color: red;
+  opacity: 0.8;}
+
+
+.blurred{
+  background: rgba(255, 255, 255, 0.25); /* translucent white */
+  opacity: 0.5;
+}

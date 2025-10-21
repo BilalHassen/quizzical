@@ -1,26 +1,59 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./QuestionContainer.scss";
+import Button from "../Button/Button";
 // default import file exports one thing
 import he from "he";
-function QuestionContainer({ question, answers, setUserGuesses }) {
-
-  // disable the buttons at the correct time, to be done...
+function QuestionContainer({
+  question,
+  answers,
+  setUserGuesses,
+  questionIndex,
+  userGuesses,
+  correctGuesses,
+  isGameDone,
+}) {
+  // disable the buttons at the correct time to
   const [disable, setIsDisabled] = useState(false);
   // state to store to track the selected button
   const [selectedIndex, setSelectedIndex] = useState(null);
+ 
 
   // pass in the index from the clicked button
   const checkUserAnswer = (e, index) => {
- 
     // set the state to track the button index that was selected
     setSelectedIndex(index);
+   
 
     const isCorrect = answers[index].isCorrect;
-    if (isCorrect) {
-      setUserGuesses((prevArray) => [...prevArray, "correct"]);
-    } else {
-      setUserGuesses((prevArray) => [...prevArray, "incorrect"]);
-    }
+
+    setUserGuesses((prevArray) => {
+      const isQuestionAnswered = prevArray.findIndex((answer, index) => {
+        return answer.questionIndex === questionIndex;
+      });
+
+      if (isQuestionAnswered >= 0) {
+        return [
+          ...prevArray.slice(0, isQuestionAnswered),
+          {
+            questionIndex: questionIndex,
+            index: index,
+            isCorrect: isCorrect,
+            answer: answers[index].answer,
+          },
+          ...prevArray.slice(isQuestionAnswered + 1),
+        ];
+      } else {
+        return [
+          ...prevArray,
+          {
+            questionIndex: questionIndex,
+            index: index,
+            isCorrect: isCorrect,
+            answer: answers[index].answer,
+          },
+        ];
+      }
+    });
   };
 
   return (
@@ -32,17 +65,23 @@ function QuestionContainer({ question, answers, setUserGuesses }) {
           // e passed to the arrow function to be passed to the checkuseranswer
           // e passed to from the arrow function cause its the function that actually
           // runs when the button is clicked.
+          const isCorrect = answers[index].isCorrect;
+      
+
           return (
-            <button
-              onClick={(e) => checkUserAnswer(e, index)}
-              // check if the index is the selected button index
-              className={`question__answer ${
-                selectedIndex === index ? "question__selected" : null
-              } `}
+            <>
+             
+                <Button
+                  text={answer.answer}
+                  onClick={(e) => checkUserAnswer(e, index)}
+                  isSelected={selectedIndex === index}
+                  isDisabled={disable}
+                  isCorrect={isCorrect}
+                  isGameDone={isGameDone}
+                  key={index}
+                />
               
-            >
-              {he.decode(answer.answer)}
-            </button>
+            </>
           );
         })}
       </div>
