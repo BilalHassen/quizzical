@@ -3,7 +3,6 @@ import "./Home.scss";
 import HomeHeader from "../../components/HomeHeader/HomeHeader";
 import getQuizdata from "../../hooks/getQuizData";
 import QuestionContainer from "../../components/QuestionContainer/QuestionContainer";
-import { he } from "he";
 import { shuffleArray } from "../../utils/shuffleArray";
 
 function Home() {
@@ -17,7 +16,6 @@ function Home() {
 
   // start the game
   const handleGameStart = () => {
-   
     setGameStarted(!isGameStarted);
   };
 
@@ -28,12 +26,10 @@ function Home() {
 
       try {
         const quizData = await getQuizdata();
-        const shuffledQuizData = shuffleArray(quizData)
-        console.log(shuffledQuizData)
+        const shuffledQuizData = shuffleArray(quizData);
         setQuizData(shuffledQuizData);
       } catch (error) {
-        console.log(error);
-        setError(error);
+        setError(error.message);
         setIsLoading(false);
       } finally {
         setIsLoading(false);
@@ -48,16 +44,27 @@ function Home() {
   const correctGuesses = userGuesses.filter((guess) => guess.isCorrect);
 
   const score = `${correctGuesses.length}/${userGuesses.length}`;
-  const scorePercentage = `${
-    (correctGuesses.length / userGuesses.length) * 100
-  }`;
+  const scorePercentage = userGuesses.length > 0 
+    ? `${Math.round((correctGuesses.length / userGuesses.length) * 100)}%`
+    : "0%";
 
   const checkUserGuesses = () => {
-    console.log("clicked");
     if (userGuesses.length === 5) {
       setIsGameDone(true);
+    } else {
+      alert(`Please answer all questions. You've answered ${userGuesses.length}/5 questions.`);
     }
   };
+
+  const handleRestart = () => {
+    setQuizData(null);
+    setUserGuesses([]);
+    setIsGameDone(false);
+    setIsLoading(false);
+    setError(null);
+    setGameStarted(false);
+  };
+  
 
   return (
     <>
@@ -65,35 +72,51 @@ function Home() {
         <HomeHeader startGame={handleGameStart} isGameStarted={isGameStarted} />
       ) : null}
 
-      <section className="questions__container">
+      <section className="questions">
         {isLoading && <h3 className="questions__loading">Loading...</h3>}
+        {error && (
+          <div className="questions__error">
+            <p>{error}</p>
+            <button onClick={handleRestart} className="questions__retry-btn">
+              Try Again
+            </button>
+          </div>
+        )}
 
-        {quizData && isGameStarted
+        {quizData && isGameStarted && !isLoading
           ? quizData.map((data, index) => {
-          
-
               return (
                 <QuestionContainer
+                  key={index}
                   questionIndex={index}
-                  userGuesses={userGuesses}
                   setUserGuesses={setUserGuesses}
                   question={data.question}
                   answers={data.answers}
-                  correctGuesses={correctGuesses}
                   isGameDone={isGameDone}
                 />
               );
             })
           : null}
+
+        <div
+          className={`questions__controls ${
+            isGameDone ? "questions__controls-reversed" : ""
+          }`}
+        >
+          {isGameStarted && !isGameDone ? (
+            <button onClick={checkUserGuesses} className="checkAnswers">
+              Check Answers
+            </button>
+          ) : isGameStarted ? (
+            <button onClick={handleRestart} className="checkAnswers">
+              Play Again
+            </button>
+          ): null}
+          {isGameDone && (
+            <p className="questions__userScore">{`You scored ${score} correct answers or ${scorePercentage}`}</p>
+          )}
+        </div>
       </section>
-      {isGameStarted && (
-        <button onClick={checkUserGuesses} className="checkAnswers">
-          Check Answers
-        </button>
-      )}
-      {isGameDone && (
-        <p className="userScore">{`You scored ${score} correct answers or ${scorePercentage}%`}</p>
-      )}
     </>
   );
 }
