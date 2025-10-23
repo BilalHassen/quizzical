@@ -5,7 +5,7 @@
     flex-direction: column;
     gap: 2rem;
     padding-bottom: 1rem;
-    border-bottom: 1px solid grey;
+    border-bottom: 1px solid rgb(194, 194, 194);
     padding: 1.6rem 1.6rem 2rem 1.6rem;
 
     &__title{
@@ -37,13 +37,5 @@
     }
 
    
-}
-
-.correct{
-    background-color: green;
-}
-
-.incorrect{
-    background-color: red;
 }
 
