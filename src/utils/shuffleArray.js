@@ -9,7 +9,7 @@ export function shuffleArray(array) {
       [answersList[i], answersList[j]] = [answersList[j], answersList[i]];
     }
 
-    const shuffledAnswersList = { ...questions, answersList };
+    const shuffledAnswersList = { ...questions, answers: answersList };
 
     return shuffledAnswersList;
   });
